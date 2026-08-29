@@ -1,1 +1,2852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Professional browser-based textile photo to vector converter."
+    >
+
+    <title>Graceful Celestial | Textile Vector Studio</title>
+
+    <!-- ImageTracerJS -->
+    <script src="https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js"></script>
+
+    <style>
+
+        /* ==========================================
+           RESET
+        ========================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f3ee;
+            color: #151515;
+            line-height: 1.5;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        .header {
+            background: #111111;
+            color: #ffffff;
+            border-bottom: 3px solid #c49a28;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+
+            min-height: 78px;
+            padding: 0 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+
+            border: 2px solid #c49a28;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #c49a28;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .brand-name {
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .brand-sub {
+            margin-top: 4px;
+
+            font-size: 9px;
+            letter-spacing: 2.5px;
+
+            color: #c49a28;
+        }
+
+        .engine-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            font-size: 10px;
+            letter-spacing: 1.4px;
+
+            color: #cccccc;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+            background: #42c95a;
+
+            box-shadow: 0 0 8px rgba(66, 201, 90, 0.7);
+        }
+
+
+        /* ==========================================
+           GENERAL
+        ========================================== */
+
+        .container {
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+        }
+
+
+        /* ==========================================
+           HERO
+        ========================================== */
+
+        .hero {
+            padding: 75px 0 65px;
+            text-align: center;
+        }
+
+        .hero-label {
+            display: inline-block;
+
+            padding: 8px 16px;
+
+            border: 1px solid #c49a28;
+
+            color: #8d6b14;
+
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            max-width: 900px;
+            margin: auto;
+
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 1.02;
+
+            letter-spacing: -2.5px;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: #b48716;
+        }
+
+        .hero-text {
+            max-width: 690px;
+
+            margin: 25px auto 0;
+
+            color: #656565;
+
+            font-size: 16px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-top: 28px;
+        }
+
+        .feature {
+            padding: 8px 14px;
+
+            border: 1px solid #dedede;
+
+            background: #ffffff;
+
+            border-radius: 100px;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        /* ==========================================
+           SECTIONS
+        ========================================== */
+
+        .section {
+            background: #ffffff;
+
+            border: 1px solid #deded8;
+
+            margin-bottom: 28px;
+
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .section-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .section-number {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+
+            color: #b48716;
+        }
+
+        .section h2 {
+            font-size: 24px;
+        }
+
+        .section-description {
+            max-width: 430px;
+
+            color: #777777;
+            font-size: 12px;
+
+            text-align: right;
+        }
+
+
+        /* ==========================================
+           UPLOAD
+        ========================================== */
+
+        .upload-zone {
+            min-height: 285px;
+
+            border: 2px dashed #cccccc;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition: 0.25s ease;
+
+            background: #ffffff;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragging {
+            border-color: #b48716;
+            background: #fcfaf3;
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #111111;
+            color: #d2a62d;
+
+            font-size: 30px;
+
+            margin-bottom: 17px;
+        }
+
+        .upload-zone h3 {
+            font-size: 18px;
+        }
+
+        .upload-zone p {
+            margin-top: 6px;
+
+            font-size: 13px;
+
+            color: #777777;
+        }
+
+        .file-types {
+            margin-top: 15px;
+
+            color: #a57d18;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 1.5px;
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        .upload-info {
+            margin-top: 14px;
+
+            background: #f6f6f3;
+
+            padding: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .info-label {
+            display: block;
+
+            color: #999999;
+
+            font-size: 9px;
+            letter-spacing: 1.5px;
+
+            margin-bottom: 4px;
+        }
+
+        #fileName {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        #fileSize {
+            color: #777777;
+            font-size: 11px;
+        }
+
+
+        /* ==========================================
+           PREVIEW
+        ========================================== */
+
+        .preview-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+        .preview-card {
+            border: 1px solid #dedede;
+
+            min-width: 0;
+        }
+
+        .preview-header {
+            padding: 14px 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .preview-label {
+            color: #999999;
+
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .preview-header h3 {
+            margin-top: 3px;
+            font-size: 15px;
+        }
+
+        .badge {
+            font-size: 9px;
+            letter-spacing: 1.5px;
+
+            background: #eeeeee;
+
+            padding: 6px 9px;
+        }
+
+        .badge-dark {
+            background: #111111;
+            color: #d2a62d;
+        }
+
+        .preview-area {
+            height: 430px;
+
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: auto;
+
+            background-color: #fafafa;
+
+            background-image:
+                linear-gradient(
+                    45deg,
+                    #eeeeee 25%,
+                    transparent 25%
+                ),
+                linear-gradient(
+                    -45deg,
+                    #eeeeee 25%,
+                    transparent 25%
+                ),
+                linear-gradient(
+                    45deg,
+                    transparent 75%,
+                    #eeeeee 75%
+                ),
+                linear-gradient(
+                    -45deg,
+                    transparent 75%,
+                    #eeeeee 75%
+                );
+
+            background-size: 20px 20px;
+
+            background-position:
+                0 0,
+                0 10px,
+                10px -10px,
+                -10px 0;
+        }
+
+        .preview-area img {
+            max-width: 100%;
+            max-height: 385px;
+
+            object-fit: contain;
+        }
+
+        #vectorPreview svg {
+            display: block;
+
+            max-width: 100%;
+            max-height: 385px;
+
+            width: auto;
+            height: auto;
+
+            background: #ffffff;
+        }
+
+        .empty-state {
+            color: #888888;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 40px;
+
+            margin-bottom: 10px;
+
+            color: #aaaaaa;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+        }
+
+
+        /* ==========================================
+           VECTOR CONTROLS
+        ========================================== */
+
+        .controls-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .control-card {
+            padding: 22px;
+
+            border: 1px solid #dedede;
+
+            background: #ffffff;
+        }
+
+        .control-top {
+            display: flex;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 18px;
+        }
+
+        .control-card h3 {
+            font-size: 15px;
+        }
+
+        .control-card p {
+            margin-top: 4px;
+
+            color: #777777;
+            font-size: 11px;
+        }
+
+        .control-value {
+            color: #b48716;
+
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #b48716;
+        }
+
+        .option-row {
+            margin-top: 18px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            font-size: 12px;
+        }
+
+        .actions {
+            display: grid;
+
+            grid-template-columns: 1fr auto;
+
+            gap: 12px;
+
+            margin-top: 22px;
+        }
+
+        .primary-button {
+            border: 0;
+
+            min-height: 56px;
+
+            padding: 15px 20px;
+
+            background: #111111;
+            color: #ffffff;
+
+            font-weight: 800;
+            font-size: 12px;
+
+            letter-spacing: 1.5px;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background: #a9821b;
+        }
+
+        .secondary-button {
+            border: 1px solid #111111;
+
+            min-height: 56px;
+
+            padding: 15px 22px;
+
+            background: #ffffff;
+            color: #111111;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .processing-note {
+            min-height: 18px;
+
+            margin-top: 12px;
+
+            text-align: center;
+
+            color: #777777;
+
+            font-size: 11px;
+        }
+
+
+        /* ==========================================
+           EXPORT
+        ========================================== */
+
+        .export-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .export-card {
+            border: 1px solid #dedede;
+
+            padding: 22px;
+
+            display: grid;
+
+            grid-template-columns: auto 1fr;
+
+            gap: 15px;
+        }
+
+        .export-icon {
+            width: 58px;
+            height: 58px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #111111;
+            color: #d0a326;
+
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .export-card h3 {
+            font-size: 15px;
+        }
+
+        .export-card p {
+            margin-top: 5px;
+
+            font-size: 11px;
+            color: #777777;
+        }
+
+        .download-button {
+            grid-column: 1 / -1;
+
+            margin-top: 5px;
+
+            min-height: 44px;
+
+            background: #ffffff;
+
+            border: 1px solid #111111;
+
+            color: #111111;
+
+            font-weight: 800;
+
+            font-size: 10px;
+            letter-spacing: 1.4px;
+
+            transition: 0.2s;
+        }
+
+        .download-button:hover:not(:disabled) {
+            background: #111111;
+            color: #ffffff;
+        }
+
+
+        /* ==========================================
+           HOW IT WORKS
+        ========================================== */
+
+        .process-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 15px;
+        }
+
+        .process-card {
+            border-top: 2px solid #111111;
+
+            padding-top: 18px;
+        }
+
+        .process-number {
+            color: #b48716;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 2px;
+        }
+
+        .process-card h3 {
+            margin-top: 9px;
+
+            font-size: 15px;
+        }
+
+        .process-card p {
+            margin-top: 7px;
+
+            color: #777777;
+            font-size: 11px;
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        footer {
+            margin-top: 70px;
+
+            background: #111111;
+
+            color: #ffffff;
+        }
+
+        .footer-inner {
+            min-height: 80px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .footer-brand {
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 2px;
+        }
+
+        .footer-text {
+            color: #777777;
+            font-size: 10px;
+        }
+
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+
+        .toast {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            z-index: 999;
+
+            max-width: 330px;
+
+            padding: 14px 18px;
+
+            background: #111111;
+            color: #ffffff;
+
+            font-size: 12px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.18);
+
+            opacity: 0;
+
+            transform: translateY(15px);
+
+            pointer-events: none;
+
+            transition: 0.25s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+
+            transform: translateY(0);
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 850px) {
+
+            .preview-grid,
+            .controls-grid,
+            .export-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+            }
+
+            .section-description {
+                text-align: left;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: min(
+                    100% - 24px,
+                    1200px
+                );
+            }
+
+            .header-inner {
+                padding: 0 14px;
+            }
+
+            .engine-status {
+                display: none;
+            }
+
+            .hero {
+                padding: 50px 0;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+
+                letter-spacing: -1.5px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .preview-area {
+                height: 330px;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-inner {
+                padding: 20px 0;
+
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                GC
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    GRACEFUL CELESTIAL
+                </div>
+
+                <div class="brand-sub">
+                    TEXTILE VECTOR STUDIO
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="engine-status">
+
+            <span class="status-dot"></span>
+
+            <span id="engineStatus">
+                VECTOR ENGINE READY
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- ==========================================
+         HERO
+    ========================================== -->
+
+    <section class="hero">
+
+        <div class="container">
+
+            <span class="hero-label">
+                PROFESSIONAL TEXTILE TOOL
+            </span>
+
+            <h1>
+                Transform Textile Photos
+
+                <span>
+                    Into Vector Artwork.
+                </span>
+            </h1>
+
+            <p class="hero-text">
+                Upload your textile, Batik or pattern image.
+                Create clean black and white vector artwork
+                directly inside your browser.
+            </p>
+
+
+            <div class="features">
+
+                <span class="feature">
+                    ⚡ Fast Processing
+                </span>
+
+                <span class="feature">
+                    ✦ Clean Vector Paths
+                </span>
+
+                <span class="feature">
+                    ↓ SVG Export
+                </span>
+
+                <span class="feature">
+                    🔒 Browser Processing
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <div class="container">
+
+
+        <!-- ==========================================
+             01 UPLOAD
+        ========================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <span class="section-number">
+                        01
+                    </span>
+
+                    <h2>
+                        Upload Artwork
+                    </h2>
+
+                </div>
+
+                <p class="section-description">
+                    Start by selecting a textile,
+                    Batik or pattern image.
+                </p>
+
+            </div>
+
+
+            <div
+                class="upload-zone"
+                id="uploadZone"
+                tabindex="0"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <h3>
+                    Drop your image here
+                </h3>
+
+                <p>
+                    or click to browse your device
+                </p>
+
+                <div class="file-types">
+                    JPG · JPEG · PNG · WEBP
+                </div>
+
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+            </div>
+
+
+            <div class="upload-info">
+
+                <div>
+
+                    <span class="info-label">
+                        SELECTED FILE
+                    </span>
+
+                    <strong id="fileName">
+                        No image selected
+                    </strong>
+
+                </div>
+
+                <span id="fileSize">
+                    🔒 Processed in your browser
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             02 WORKSPACE
+        ========================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <h2>
+                        Vector Workspace
+                    </h2>
+
+                </div>
+
+                <p class="section-description">
+                    Compare the original image
+                    with your generated vector.
+                </p>
+
+            </div>
+
+
+            <div class="preview-grid">
+
+
+                <!-- ORIGINAL -->
+
+                <div class="preview-card">
+
+                    <div class="preview-header">
+
+                        <div>
+
+                            <div class="preview-label">
+                                INPUT
+                            </div>
+
+                            <h3>
+                                Original Image
+                            </h3>
+
+                        </div>
+
+                        <span class="badge">
+                            SOURCE
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="preview-area"
+                        id="originalPreview"
+                    >
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ▧
+                            </div>
+
+                            <p>
+                                Upload an image to preview
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- VECTOR -->
+
+                <div class="preview-card">
+
+                    <div class="preview-header">
+
+                        <div>
+
+                            <div class="preview-label">
+                                OUTPUT
+                            </div>
+
+                            <h3>
+                                Vector Artwork
+                            </h3>
+
+                        </div>
+
+                        <span class="badge badge-dark">
+                            SVG
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="preview-area"
+                        id="vectorPreview"
+                    >
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ✦
+                            </div>
+
+                            <p>
+                                Your vector artwork
+                                will appear here
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             03 CONTROLS
+        ========================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <span class="section-number">
+                        03
+                    </span>
+
+                    <h2>
+                        Vector Controls
+                    </h2>
+
+                </div>
+
+                <p class="section-description">
+                    Adjust the settings for stronger
+                    or more detailed vector artwork.
+                </p>
+
+            </div>
+
+
+            <div class="controls-grid">
+
+
+                <div class="control-card">
+
+                    <div class="control-top">
+
+                        <div>
+
+                            <h3>
+                                Threshold
+                            </h3>
+
+                            <p>
+                                Control black and white contrast.
+                            </p>
+
+                        </div>
+
+                        <span
+                            class="control-value"
+                            id="thresholdValue"
+                        >
+                            128
+                        </span>
+
+                    </div>
+
+
+                    <input
+                        type="range"
+                        id="threshold"
+                        min="0"
+                        max="255"
+                        value="128"
+                    >
+
+                </div>
+
+
+
+                <div class="control-card">
+
+                    <div class="control-top">
+
+                        <div>
+
+                            <h3>
+                                Detail
+                            </h3>
+
+                            <p>
+                                Control vector path complexity.
+                            </p>
+
+                        </div>
+
+                        <span
+                            class="control-value"
+                            id="detailValue"
+                        >
+                            5
+                        </span>
+
+                    </div>
+
+
+                    <input
+                        type="range"
+                        id="detail"
+                        min="1"
+                        max="10"
+                        value="5"
+                    >
+
+
+                    <label class="option-row">
+
+                        <input
+                            type="checkbox"
+                            id="invert"
+                        >
+
+                        Invert black / white
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary-button"
+                    id="vectorizeButton"
+                    disabled
+                >
+                    ✦ CREATE VECTOR ARTWORK →
+                </button>
+
+                <button
+                    class="secondary-button"
+                    id="resetButton"
+                >
+                    RESET
+                </button>
+
+            </div>
+
+
+            <p
+                class="processing-note"
+                id="processingNote"
+            >
+                Recommended for Batik:
+                Threshold 110–160 · Detail 4–7
+            </p>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             04 EXPORT
+        ========================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <span class="section-number">
+                        04
+                    </span>
+
+                    <h2>
+                        Export Artwork
+                    </h2>
+
+                </div>
+
+                <p class="section-description">
+                    Download your completed vector design.
+                </p>
+
+            </div>
+
+
+            <div class="export-grid">
+
+
+                <div class="export-card">
+
+                    <div class="export-icon">
+                        SVG
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Scalable Vector Graphics
+                        </h3>
+
+                        <p>
+                            Best for Illustrator,
+                            web and professional editing.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="download-button"
+                        id="downloadSvg"
+                        disabled
+                    >
+                        DOWNLOAD SVG
+                    </button>
+
+                </div>
+
+
+
+                <div class="export-card">
+
+                    <div class="export-icon">
+                        PNG
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            High Resolution Preview
+                        </h3>
+
+                        <p>
+                            Export a raster preview
+                            generated from your vector.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="download-button"
+                        id="downloadPng"
+                        disabled
+                    >
+                        DOWNLOAD PNG
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             HOW IT WORKS
+        ========================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <h2>
+                        How It Works
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="process-grid">
+
+                <div class="process-card">
+
+                    <span class="process-number">
+                        01
+                    </span>
+
+                    <h3>
+                        Upload
+                    </h3>
+
+                    <p>
+                        Select your textile,
+                        artwork or pattern image.
+                    </p>
+
+                </div>
+
+
+                <div class="process-card">
+
+                    <span class="process-number">
+                        02
+                    </span>
+
+                    <h3>
+                        Process
+                    </h3>
+
+                    <p>
+                        The browser converts
+                        the source into monochrome data.
+                    </p>
+
+                </div>
+
+
+                <div class="process-card">
+
+                    <span class="process-number">
+                        03
+                    </span>
+
+                    <h3>
+                        Vectorize
+                    </h3>
+
+                    <p>
+                        ImageTracer creates scalable
+                        vector paths.
+                    </p>
+
+                </div>
+
+
+                <div class="process-card">
+
+                    <span class="process-number">
+                        04
+                    </span>
+
+                    <h3>
+                        Export
+                    </h3>
+
+                    <p>
+                        Download the finished artwork
+                        as SVG or PNG.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <div>
+
+            <div class="footer-brand">
+                GRACEFUL CELESTIAL
+            </div>
+
+            <div class="brand-sub">
+                TEXTILE VECTOR STUDIO
+            </div>
+
+        </div>
+
+        <p class="footer-text">
+            Browser-based vector conversion studio
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+
+<script>
+
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
+
+    const imageInput =
+        document.getElementById("imageInput");
+
+    const uploadZone =
+        document.getElementById("uploadZone");
+
+    const originalPreview =
+        document.getElementById("originalPreview");
+
+    const vectorPreview =
+        document.getElementById("vectorPreview");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileSize =
+        document.getElementById("fileSize");
+
+    const threshold =
+        document.getElementById("threshold");
+
+    const thresholdValue =
+        document.getElementById("thresholdValue");
+
+    const detail =
+        document.getElementById("detail");
+
+    const detailValue =
+        document.getElementById("detailValue");
+
+    const invert =
+        document.getElementById("invert");
+
+    const vectorizeButton =
+        document.getElementById("vectorizeButton");
+
+    const resetButton =
+        document.getElementById("resetButton");
+
+    const downloadSvg =
+        document.getElementById("downloadSvg");
+
+    const downloadPng =
+        document.getElementById("downloadPng");
+
+    const processingNote =
+        document.getElementById("processingNote");
+
+    const engineStatus =
+        document.getElementById("engineStatus");
+
+    const toast =
+        document.getElementById("toast");
+
+
+
+    /* ==========================================
+       VARIABLES
+    ========================================== */
+
+    let sourceImage = null;
+
+    let sourceFileName = "vector-artwork";
+
+    let svgOutput = "";
+
+
+
+    /* ==========================================
+       SLIDERS
+    ========================================== */
+
+    threshold.addEventListener(
+        "input",
+        function () {
+
+            thresholdValue.textContent =
+                threshold.value;
+
+        }
+    );
+
+
+    detail.addEventListener(
+        "input",
+        function () {
+
+            detailValue.textContent =
+                detail.value;
+
+        }
+    );
+
+
+
+    /* ==========================================
+       UPLOAD CLICK
+    ========================================== */
+
+    uploadZone.addEventListener(
+        "click",
+        function () {
+
+            imageInput.click();
+
+        }
+    );
+
+
+    uploadZone.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+
+                event.preventDefault();
+
+                imageInput.click();
+
+            }
+
+        }
+    );
+
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            if (!imageInput.files.length) {
+                return;
+            }
+
+            loadFile(
+                imageInput.files[0]
+            );
+
+        }
+    );
+
+
+
+    /* ==========================================
+       DRAG AND DROP
+    ========================================== */
+
+    uploadZone.addEventListener(
+        "dragover",
+        function (event) {
+
+            event.preventDefault();
+
+            uploadZone.classList.add(
+                "dragging"
+            );
+
+        }
+    );
+
+
+    uploadZone.addEventListener(
+        "dragleave",
+        function () {
+
+            uploadZone.classList.remove(
+                "dragging"
+            );
+
+        }
+    );
+
+
+    uploadZone.addEventListener(
+        "drop",
+        function (event) {
+
+            event.preventDefault();
+
+            uploadZone.classList.remove(
+                "dragging"
+            );
+
+            const files =
+                event.dataTransfer.files;
+
+            if (!files.length) {
+                return;
+            }
+
+            loadFile(
+                files[0]
+            );
+
+        }
+    );
+
+
+
+    /* ==========================================
+       LOAD IMAGE
+    ========================================== */
+
+    function loadFile(file) {
+
+        if (!file.type.startsWith("image/")) {
+
+            showToast(
+                "Please select an image file."
+            );
+
+            return;
+        }
+
+
+        const maxSize =
+            15 * 1024 * 1024;
+
+
+        if (file.size > maxSize) {
+
+            showToast(
+                "Image is too large. Maximum 15 MB."
+            );
+
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                const image =
+                    new Image();
+
+
+                image.onload =
+                    function () {
+
+                        sourceImage =
+                            image;
+
+                        sourceFileName =
+                            removeExtension(
+                                file.name
+                            );
+
+
+                        originalPreview.innerHTML =
+                            "";
+
+
+                        const previewImage =
+                            document.createElement(
+                                "img"
+                            );
+
+
+                        previewImage.src =
+                            event.target.result;
+
+
+                        previewImage.alt =
+                            "Original uploaded artwork";
+
+
+                        originalPreview.appendChild(
+                            previewImage
+                        );
+
+
+                        fileName.textContent =
+                            file.name;
+
+
+                        fileSize.textContent =
+                            formatFileSize(
+                                file.size
+                            );
+
+
+                        vectorizeButton.disabled =
+                            false;
+
+
+                        clearVector();
+
+
+                        showToast(
+                            "Image loaded successfully."
+                        );
+
+                    };
+
+
+                image.onerror =
+                    function () {
+
+                        showToast(
+                            "Unable to load this image."
+                        );
+
+                    };
+
+
+                image.src =
+                    event.target.result;
+
+            };
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+
+
+    /* ==========================================
+       VECTORIZE
+    ========================================== */
+
+    vectorizeButton.addEventListener(
+        "click",
+        vectorizeImage
+    );
+
+
+    function vectorizeImage() {
+
+        if (!sourceImage) {
+
+            showToast(
+                "Please upload an image first."
+            );
+
+            return;
+        }
+
+
+        if (
+            typeof ImageTracer ===
+            "undefined"
+        ) {
+
+            showToast(
+                "Vector engine failed to load. Check your internet connection."
+            );
+
+            engineStatus.textContent =
+                "ENGINE LOAD ERROR";
+
+            return;
+        }
+
+
+        vectorizeButton.disabled =
+            true;
+
+
+        vectorizeButton.textContent =
+            "PROCESSING...";
+
+
+        processingNote.textContent =
+            "Creating vector paths. Please wait...";
+
+
+        engineStatus.textContent =
+            "PROCESSING";
+
+
+        setTimeout(
+            function () {
+
+                try {
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+
+                    const ctx =
+                        canvas.getContext(
+                            "2d",
+                            {
+                                willReadFrequently:
+                                    true
+                            }
+                        );
+
+
+                    /*
+                       Large images are resized
+                       to keep browser processing fast.
+                    */
+
+                    const maxDimension =
+                        1200;
+
+
+                    let width =
+                        sourceImage.naturalWidth;
+
+
+                    let height =
+                        sourceImage.naturalHeight;
+
+
+                    if (
+                        width > maxDimension ||
+                        height > maxDimension
+                    ) {
+
+                        const scale =
+                            Math.min(
+                                maxDimension / width,
+                                maxDimension / height
+                            );
+
+
+                        width =
+                            Math.round(
+                                width * scale
+                            );
+
+
+                        height =
+                            Math.round(
+                                height * scale
+                            );
+
+                    }
+
+
+                    canvas.width =
+                        width;
+
+
+                    canvas.height =
+                        height;
+
+
+                    ctx.drawImage(
+                        sourceImage,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+
+                    const imageData =
+                        ctx.getImageData(
+                            0,
+                            0,
+                            width,
+                            height
+                        );
+
+
+                    const data =
+                        imageData.data;
+
+
+                    const limit =
+                        Number(
+                            threshold.value
+                        );
+
+
+                    const shouldInvert =
+                        invert.checked;
+
+
+                    /*
+                       Convert image to pure
+                       black and white.
+                    */
+
+                    for (
+                        let i = 0;
+                        i < data.length;
+                        i += 4
+                    ) {
+
+                        const red =
+                            data[i];
+
+
+                        const green =
+                            data[i + 1];
+
+
+                        const blue =
+                            data[i + 2];
+
+
+                        const gray =
+                            (
+                                red * 0.299
+                            ) +
+                            (
+                                green * 0.587
+                            ) +
+                            (
+                                blue * 0.114
+                            );
+
+
+                        let value =
+                            gray >= limit
+                                ? 255
+                                : 0;
+
+
+                        if (shouldInvert) {
+
+                            value =
+                                255 - value;
+
+                        }
+
+
+                        data[i] =
+                            value;
+
+
+                        data[i + 1] =
+                            value;
+
+
+                        data[i + 2] =
+                            value;
+
+
+                        data[i + 3] =
+                            255;
+
+                    }
+
+
+                    const detailLevel =
+                        Number(
+                            detail.value
+                        );
+
+
+                    /*
+                       Higher Detail:
+                       smaller error tolerance
+                       and more vector paths.
+                    */
+
+                    const traceTolerance =
+                        Math.max(
+                            0.15,
+                            2.2 -
+                            (
+                                detailLevel * 0.18
+                            )
+                        );
+
+
+                    const omit =
+                        Math.max(
+                            1,
+                            12 -
+                            detailLevel
+                        );
+
+
+                    const options = {
+
+                        numberofcolors: 2,
+
+                        colorsampling: 0,
+
+                        ltres:
+                            traceTolerance,
+
+                        qtres:
+                            traceTolerance,
+
+                        pathomit:
+                            omit,
+
+                        rightangleenhance:
+                            true,
+
+                        strokewidth:
+                            0,
+
+                        linefilter:
+                            true,
+
+                        scale:
+                            1,
+
+                        viewbox:
+                            true,
+
+                        desc:
+                            false
+
+                    };
+
+
+                    svgOutput =
+                        ImageTracer.imagedataToSVG(
+                            imageData,
+                            options
+                        );
+
+
+                    /*
+                       Display generated SVG.
+                    */
+
+                    vectorPreview.innerHTML =
+                        svgOutput;
+
+
+                    const svg =
+                        vectorPreview.querySelector(
+                            "svg"
+                        );
+
+
+                    if (svg) {
+
+                        svg.setAttribute(
+                            "preserveAspectRatio",
+                            "xMidYMid meet"
+                        );
+
+                    }
+
+
+                    downloadSvg.disabled =
+                        false;
+
+
+                    downloadPng.disabled =
+                        false;
+
+
+                    processingNote.textContent =
+                        "Vector artwork created successfully.";
+
+
+                    engineStatus.textContent =
+                        "VECTOR ENGINE READY";
+
+
+                    showToast(
+                        "Vector artwork created."
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+
+                    processingNote.textContent =
+                        "Vector conversion failed.";
+
+
+                    engineStatus.textContent =
+                        "ENGINE ERROR";
+
+
+                    showToast(
+                        "Vector conversion failed. Try another image."
+                    );
+
+                }
+
+                finally {
+
+                    vectorizeButton.disabled =
+                        false;
+
+
+                    vectorizeButton.textContent =
+                        "✦ CREATE VECTOR ARTWORK →";
+
+                }
+
+            },
+            80
+        );
+
+    }
+
+
+
+    /* ==========================================
+       DOWNLOAD SVG
+    ========================================== */
+
+    downloadSvg.addEventListener(
+        "click",
+        function () {
+
+            if (!svgOutput) {
+                return;
+            }
+
+
+            const blob =
+                new Blob(
+                    [svgOutput],
+                    {
+                        type:
+                            "image/svg+xml;charset=utf-8"
+                    }
+                );
+
+
+            downloadBlob(
+                blob,
+                sourceFileName +
+                "-vector.svg"
+            );
+
+
+            showToast(
+                "SVG downloaded."
+            );
+
+        }
+    );
+
+
+
+    /* ==========================================
+       DOWNLOAD PNG
+    ========================================== */
+
+    downloadPng.addEventListener(
+        "click",
+        function () {
+
+            if (!svgOutput) {
+                return;
+            }
+
+
+            const svgBlob =
+                new Blob(
+                    [svgOutput],
+                    {
+                        type:
+                            "image/svg+xml;charset=utf-8"
+                    }
+                );
+
+
+            const svgUrl =
+                URL.createObjectURL(
+                    svgBlob
+                );
+
+
+            const image =
+                new Image();
+
+
+            image.onload =
+                function () {
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+
+                    const scale =
+                        2;
+
+
+                    canvas.width =
+                        image.width *
+                        scale;
+
+
+                    canvas.height =
+                        image.height *
+                        scale;
+
+
+                    const ctx =
+                        canvas.getContext(
+                            "2d"
+                        );
+
+
+                    /*
+                       White PNG background.
+                    */
+
+                    ctx.fillStyle =
+                        "#ffffff";
+
+
+                    ctx.fillRect(
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+
+
+                    ctx.drawImage(
+                        image,
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+
+
+                    canvas.toBlob(
+                        function (blob) {
+
+                            if (!blob) {
+                                return;
+                            }
+
+
+                            downloadBlob(
+                                blob,
+                                sourceFileName +
+                                "-vector.png"
+                            );
+
+
+                            showToast(
+                                "PNG downloaded."
+                            );
+
+                        },
+                        "image/png"
+                    );
+
+
+                    URL.revokeObjectURL(
+                        svgUrl
+                    );
+
+                };
+
+
+            image.onerror =
+                function () {
+
+                    URL.revokeObjectURL(
+                        svgUrl
+                    );
+
+
+                    showToast(
+                        "PNG export failed."
+                    );
+
+                };
+
+
+            image.src =
+                svgUrl;
+
+        }
+    );
+
+
+
+    /* ==========================================
+       RESET
+    ========================================== */
+
+    resetButton.addEventListener(
+        "click",
+        resetApp
+    );
+
+
+    function resetApp() {
+
+        sourceImage =
+            null;
+
+
+        svgOutput =
+            "";
+
+
+        sourceFileName =
+            "vector-artwork";
+
+
+        imageInput.value =
+            "";
+
+
+        threshold.value =
+            128;
+
+
+        thresholdValue.textContent =
+            "128";
+
+
+        detail.value =
+            5;
+
+
+        detailValue.textContent =
+            "5";
+
+
+        invert.checked =
+            false;
+
+
+        originalPreview.innerHTML =
+            `
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ▧
+                    </div>
+
+                    <p>
+                        Upload an image to preview
+                    </p>
+
+                </div>
+            `;
+
+
+        clearVector();
+
+
+        fileName.textContent =
+            "No image selected";
+
+
+        fileSize.textContent =
+            "🔒 Processed in your browser";
+
+
+        vectorizeButton.disabled =
+            true;
+
+
+        processingNote.textContent =
+            "Recommended for Batik: Threshold 110–160 · Detail 4–7";
+
+
+        engineStatus.textContent =
+            "VECTOR ENGINE READY";
+
+
+        showToast(
+            "Workspace reset."
+        );
+
+    }
+
+
+
+    /* ==========================================
+       HELPERS
+    ========================================== */
+
+    function clearVector() {
+
+        svgOutput =
+            "";
+
+
+        vectorPreview.innerHTML =
+            `
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ✦
+                    </div>
+
+                    <p>
+                        Your vector artwork
+                        will appear here
+                    </p>
+
+                </div>
+            `;
+
+
+        downloadSvg.disabled =
+            true;
+
+
+        downloadPng.disabled =
+            true;
+
+    }
+
+
+
+    function downloadBlob(
+        blob,
+        filename
+    ) {
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            filename;
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        setTimeout(
+            function () {
+
+                URL.revokeObjectURL(
+                    url
+                );
+
+            },
+            1000
+        );
+
+    }
+
+
+
+    function removeExtension(
+        filename
+    ) {
+
+        return filename.replace(
+            /\.[^/.]+$/,
+            ""
+        );
+
+    }
+
+
+
+    function formatFileSize(
+        bytes
+    ) {
+
+        if (bytes < 1024) {
+
+            return (
+                bytes +
+                " B"
+            );
+
+        }
+
+
+        if (
+            bytes <
+            1024 * 1024
+        ) {
+
+            return (
+                (
+                    bytes /
+                    1024
+                ).toFixed(1)
+                +
+                " KB"
+            );
+
+        }
+
+
+        return (
+            (
+                bytes /
+                (
+                    1024 *
+                    1024
+                )
+            ).toFixed(1)
+            +
+            " MB"
+        );
+
+    }
+
+
+
+    function showToast(
+        message
+    ) {
+
+        toast.textContent =
+            message;
+
+
+        toast.classList.add(
+            "show"
+        );
+
+
+        clearTimeout(
+            showToast.timer
+        );
+
+
+        showToast.timer =
+            setTimeout(
+                function () {
+
+                    toast.classList.remove(
+                        "show"
+                    );
+
+                },
+                2500
+            );
+
+    }
+
+
+
+    /* ==========================================
+       ENGINE CHECK
+    ========================================== */
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            if (
+                typeof ImageTracer ===
+                "undefined"
+            ) {
+
+                engineStatus.textContent =
+                    "ENGINE LOAD ERROR";
+
+
+                showToast(
+                    "Vector engine could not load. Check internet connection."
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>
