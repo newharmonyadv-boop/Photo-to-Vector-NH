@@ -1,13 +1,18 @@
-# Vectorly — Photo to SVG
+# Vectorly 2 — Photo to SVG
 
-Vectorly is a beginner-friendly, browser-based photo vectorizer. Upload a JPG or PNG, preview the original, convert it to an SVG-style vector, and download the result—all without sending your image to a server.
+Vectorly 2 is a beginner-friendly, browser-based photo vectorizer. Upload a JPG or PNG, compare the original and vector result, fine-tune the trace, and download the result—all without sending your image to a server.
 
 ## Features
 
 - JPG and PNG upload by file picker or drag and drop
-- Original image preview and generated SVG preview
+- Responsive, side-by-side original and SVG previews
+- Color count, detail, smoothing, noise removal, outline, and background controls
+- **Batik High Detail** preset for curved ornaments, fine decoration, and distinct colors
+- Automatic reconversion whenever settings change after the first trace
+- Synchronized 50–200% preview zoom
+- Interactive before-and-after comparison slider
 - One-click vector conversion powered by [ImageTracerJS](https://github.com/jankovicsandras/imagetracerjs)
-- Downloadable `.svg` files with friendly filenames
+- Downloadable `.svg` files that retain the original base filename
 - Clear validation, loading, success, and error messages
 - Responsive, keyboard-accessible interface
 - Local browser processing for image privacy
@@ -35,14 +40,16 @@ Then visit [http://localhost:8000](http://localhost:8000) in your browser.
 1. Drag a photo onto the upload area, or select **browse your files**.
 2. Choose a JPG or PNG file no larger than 10 MB.
 3. Confirm that the original photo appears in the preview.
-4. Select **Convert to vector** and wait for the SVG preview.
-5. Select **Download SVG**. The result is saved as `<original-name>-vector.svg`.
+4. Pick a color count and detail level, or use **Batik High Detail** for intricate artwork.
+5. Select **Convert to vector** and wait for the SVG preview. Later setting changes reconvert automatically.
+6. Zoom both previews together or drag the before-and-after handle to inspect the result.
+7. Select **Download SVG**. The result is saved as `<original-name>.svg`.
 
 To start over, remove the selected file with the × button and choose another image.
 
 ## How conversion works
 
-The browser reads the selected image as a data URL. ImageTracerJS groups its colors and traces those areas into SVG paths using its `posterized2` preset. The generated SVG is previewed in the page and packaged as an SVG file only when you download it.
+The browser reads the selected image as a data URL. ImageTracerJS quantizes its colors and traces those areas into SVG paths using options assembled from the controls. Detail adjusts curve tracing, smoothing reduces abrupt pixel transitions, noise removal omits tiny paths, and outline thickness adds a matching edge. Background removal discards the trace's background color layer. The generated SVG is previewed in the page and packaged as an SVG file only when you download it.
 
 All conversion happens locally in the browser. The application has no upload server and does not store your image.
 
@@ -86,3 +93,11 @@ Allow downloads for the page in your browser, then select **Download SVG** again
 ## Development notes
 
 No compilation is necessary. After editing the HTML, CSS, or JavaScript, refresh the browser. Keep browser developer tools open to spot console errors while testing.
+
+Run the automated suite with:
+
+```bash
+node --test
+```
+
+Because every asset uses relative paths and there is no build step or server-side dependency, the root directory can be published directly with GitHub Pages.

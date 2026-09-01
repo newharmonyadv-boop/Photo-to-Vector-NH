@@ -16,6 +16,8 @@ class Element {
     this.className = "";
     this.value = "";
     this.src = "";
+    this.style = { setProperty(name, value) { this[name] = value; } };
+    this.checked = false;
   }
 
   addEventListener(name, handler) { this.listeners[name] = handler; }
@@ -25,20 +27,29 @@ class Element {
   remove() { this.removed = true; }
   removeAttribute(name) { delete this.attributes[name]; if (name === "src") this.src = ""; }
   setAttribute(name, value) { this.attributes[name] = value; }
+  getAttribute(name) { return this.attributes[name]; }
   replaceChildren(...children) { this.children = children; }
   querySelector(selector) {
     if (selector === "span") return this.label ||= new Element();
     return null;
   }
+  querySelectorAll() { return []; }
 }
 
 function createApp() {
-  const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty"];
+  const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty", "settings", "batikPreset", "colorCount", "detailLevel", "smoothing", "smoothingValue", "noiseRemoval", "noiseValue", "outlineThickness", "outlineValue", "removeBackground", "zoomOut", "zoomRange", "zoomValue", "zoomIn", "compareCard", "compareOriginal", "compareAfter", "compareLine", "compareRange", "compareValue"];
   const elements = Object.fromEntries(ids.map((id) => [id, new Element(id)]));
   elements.selectedFile.hidden = true;
   elements.originalImage.hidden = true;
   elements.convertBtn.disabled = true;
   elements.downloadBtn.disabled = true;
+  elements.colorCount.value = "8";
+  elements.detailLevel.value = "Medium";
+  elements.smoothing.value = "2";
+  elements.noiseRemoval.value = "4";
+  elements.outlineThickness.value = "0";
+  elements.zoomRange.value = "100";
+  elements.compareRange.value = "50";
   let downloadedLink;
   let revokedUrl;
 
@@ -60,6 +71,7 @@ function createApp() {
 
   const document = {
     body: new Element("body"),
+    documentElement: new Element("html"),
     querySelector: (selector) => elements[selector.slice(1)],
     createElement: () => (downloadedLink = new Element("a")),
     importNode: (node) => node,
@@ -74,6 +86,7 @@ function createApp() {
     window: {
       ImageTracer: { imageToSVG: (_url, done) => done('<svg viewBox="0 0 1 1"><path d="M0 0"/></svg>') },
       setTimeout: (callback) => callback(),
+      clearTimeout() {},
     },
     URL: {
       createObjectURL: () => "blob:mock-vector",
@@ -117,9 +130,35 @@ test("converts the selected image, previews the SVG, and downloads it", () => {
   assert.match(app.elements.statusMessage.textContent, /ready to download/);
 
   app.elements.downloadBtn.click();
-  assert.equal(app.getDownloadedLink().download, "holiday.photo-vector.svg");
+  assert.equal(app.getDownloadedLink().download, "holiday.photo.svg");
   assert.equal(app.getDownloadedLink().href, "blob:mock-vector");
   assert.equal(app.getDownloadedLink().clicked, true);
   assert.equal(app.getRevokedUrl(), "blob:mock-vector");
   assert.match(app.elements.statusMessage.textContent, /downloaded successfully/);
+});
+
+test("applies Batik High Detail settings and auto-reconverts", () => {
+  const app = createApp();
+  app.elements.fileInput.dispatch("change", { target: { files: [{ name: "batik.png", type: "image/png", size: 2048 }] } });
+  app.elements.convertBtn.click();
+  app.elements.batikPreset.click();
+
+  assert.equal(app.elements.colorCount.value, "32");
+  assert.equal(app.elements.detailLevel.value, "High");
+  assert.equal(app.elements.smoothing.value, "1");
+  assert.equal(app.elements.noiseRemoval.value, "1");
+  assert.equal(app.elements.compareCard.hidden, false);
+  assert.match(app.elements.statusMessage.textContent, /Updating your vector/);
+});
+
+test("keeps zoom and before-after controls synchronized", () => {
+  const app = createApp();
+  app.elements.zoomIn.click();
+  assert.equal(app.elements.zoomRange.value, 110);
+  assert.equal(app.elements.zoomValue.textContent, "110%");
+
+  app.elements.compareRange.value = "70";
+  app.elements.compareRange.dispatch("input");
+  assert.equal(app.elements.compareAfter.style.clipPath, "inset(0 30% 0 0)");
+  assert.equal(app.elements.compareLine.style.left, "70%");
 });
