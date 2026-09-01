@@ -1,13 +1,29 @@
-# Vectorly — Photo to SVG
+# Vectorly — Experimental Version 3
 
-Vectorly is a beginner-friendly, browser-based photo vectorizer. Upload a JPG or PNG, preview the original, convert it to an SVG-style vector, and download the result—all without sending your image to a server.
+Vectorly is a beginner-friendly, browser-based photo vectorizer. Version 3 adds an experimental **Batik Production Engine** while preserving the complete Version 2 converter as the **Legacy Engine**. Everything still runs locally in the browser.
 
 ## Features
 
+### Batik Production Engine (experimental)
+
+- Lighting normalization, brightness/contrast correction, and edge-aware noise reduction
+- Perceptual LAB color quantization with 8, 12, 16, or 24 production colors
+- Connected-region cleanup, configurable minimum shape size, morphological hole filling, and optional decorative-dot preservation
+- Three-stage Original Photo, Cleaned Color Preview, and Final Layered SVG workspace
+- Editable extracted palette that updates the cleaned preview and SVG layers
+- Closed, simplified, smoothed contours grouped into descriptive, Illustrator-friendly SVG color layers
+
+### Legacy Engine (Version 2)
+
 - JPG and PNG upload by file picker or drag and drop
-- Original image preview and generated SVG preview
+- Responsive, side-by-side original and SVG previews
+- Color count, detail, smoothing, noise removal, outline, and background controls
+- **Batik High Detail** preset for curved ornaments, fine decoration, and distinct colors
+- Automatic reconversion whenever settings change after the first trace
+- Synchronized 50–200% preview zoom
+- Interactive before-and-after comparison slider
 - One-click vector conversion powered by [ImageTracerJS](https://github.com/jankovicsandras/imagetracerjs)
-- Downloadable `.svg` files with friendly filenames
+- Downloadable `.svg` files that retain the original base filename
 - Clear validation, loading, success, and error messages
 - Responsive, keyboard-accessible interface
 - Local browser processing for image privacy
@@ -35,14 +51,18 @@ Then visit [http://localhost:8000](http://localhost:8000) in your browser.
 1. Drag a photo onto the upload area, or select **browse your files**.
 2. Choose a JPG or PNG file no larger than 10 MB.
 3. Confirm that the original photo appears in the preview.
-4. Select **Convert to vector** and wait for the SVG preview.
-5. Select **Download SVG**. The result is saved as `<original-name>-vector.svg`.
+4. Keep **Batik Production Engine** selected for production cleanup, or choose **Legacy Engine (Version 2)** for the previous ImageTracerJS workflow.
+5. Adjust production colors, edge smoothing, minimum shape size, hole filling, shadow correction, and decorative-dot preservation.
+6. Select **Convert to vector** and inspect the cleaned-color and layered-SVG stages. Later setting changes reconvert automatically.
+7. Optionally select an extracted palette swatch and choose a replacement color.
+8. Zoom the previews together or drag the before-and-after handle to inspect the result.
+9. Select **Download SVG**. The result is saved as `<original-name>.svg`.
 
 To start over, remove the selected file with the × button and choose another image.
 
 ## How conversion works
 
-The browser reads the selected image as a data URL. ImageTracerJS groups its colors and traces those areas into SVG paths using its `posterized2` preset. The generated SVG is previewed in the page and packaged as an SVG file only when you download it.
+The production pipeline downsizes very large inputs for responsive browser processing, normalizes local luminance, applies an edge-aware blur, clusters pixels using LAB color distance, cleans connected regions, fills tiny holes, and follows each color boundary into closed paths. Each color becomes a named SVG group with even-odd paths so holes remain editable. The Legacy Engine continues to use ImageTracerJS and all Version 2 controls.
 
 All conversion happens locally in the browser. The application has no upload server and does not store your image.
 
@@ -79,10 +99,20 @@ Allow downloads for the page in your browser, then select **Download SVG** again
 .
 ├── index.html   # Page structure and content
 ├── styles.css   # Responsive visual design
-├── script.js    # Upload, conversion, preview, and download logic
+├── script.js    # Upload, engine selection, preview, and download logic
+├── batik-engine.js # Dependency-free production image and contour pipeline
+├── tests/       # Legacy application and production-engine tests
 └── README.md    # Setup and usage documentation
 ```
 
 ## Development notes
 
 No compilation is necessary. After editing the HTML, CSS, or JavaScript, refresh the browser. Keep browser developer tools open to spot console errors while testing.
+
+Run the automated suite with:
+
+```bash
+node --test
+```
+
+Because every asset uses relative paths and there is no build step or server-side dependency, the root directory can be published directly with GitHub Pages.

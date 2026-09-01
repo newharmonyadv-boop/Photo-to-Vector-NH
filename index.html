@@ -16,14 +16,14 @@
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 36 36"><path d="M18 3 31 10.5v15L18 33 5 25.5v-15L18 3Z"/><circle cx="18" cy="18" r="5"/></svg>
         </span>
-        <span>Vectorly</span>
+        <span>Vectorly <small>3 EXPERIMENTAL</small></span>
       </a>
       <span class="privacy-note"><span aria-hidden="true">✦</span> Free &amp; private</span>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="page-title">
-        <p class="eyebrow"><span aria-hidden="true">✦</span> Simple photo vectorizer</p>
+        <p class="eyebrow"><span aria-hidden="true">✦</span> Batik Production Engine</p>
         <h1 id="page-title">Turn any photo into a <span>crisp vector.</span></h1>
         <p class="hero-copy">Upload a JPG or PNG, convert it in one click, and download a scalable SVG. Everything happens right in your browser.</p>
       </section>
@@ -49,6 +49,63 @@
             <button class="icon-button" id="removeFileBtn" type="button" aria-label="Remove selected image">×</button>
           </div>
 
+          <div class="engine-picker">
+            <label for="engineMode">Conversion engine</label>
+            <select id="engineMode">
+              <option value="production" selected>Batik Production Engine (Experimental)</option>
+              <option value="legacy">Legacy Engine (Version 2)</option>
+            </select>
+            <p id="engineDescription">Preprocesses lighting and noise, separates perceptual colors, cleans shapes, and exports editable color layers.</p>
+          </div>
+
+          <fieldset class="settings" id="settings" hidden>
+            <legend>Fine-tune your vector</legend>
+            <div class="preset-row">
+              <button class="preset-button" id="batikPreset" type="button">✦ Batik High Detail</button>
+              <span>Best for curved ornaments and intricate colorwork</span>
+            </div>
+            <div class="settings-grid">
+              <label>Color count
+                <select id="colorCount"><option>4</option><option selected>8</option><option>16</option><option>24</option><option>32</option></select>
+              </label>
+              <label>Detail level
+                <select id="detailLevel"><option>Low</option><option selected>Medium</option><option>High</option></select>
+              </label>
+              <label>Smoothing <output id="smoothingValue">2</output>
+                <input id="smoothing" type="range" min="0" max="5" value="2">
+              </label>
+              <label>Noise removal <output id="noiseValue">4 px</output>
+                <input id="noiseRemoval" type="range" min="0" max="12" value="4">
+              </label>
+              <label>Outline thickness <output id="outlineValue">0 px</output>
+                <input id="outlineThickness" type="range" min="0" max="4" step="0.5" value="0">
+              </label>
+              <label class="toggle"><input id="removeBackground" type="checkbox"><span>Remove background</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings production-settings" id="productionSettings">
+            <legend>Production cleanup</legend>
+            <div class="settings-grid">
+              <label>Production Colors
+                <select id="productionColors"><option>8</option><option selected>12</option><option>16</option><option>24</option></select>
+              </label>
+              <label>Edge Smoothing <output id="productionSmoothingValue">2</output>
+                <input id="productionSmoothing" type="range" min="0" max="5" value="2">
+              </label>
+              <label>Minimum Shape Size <output id="minimumAreaValue">12 px</output>
+                <input id="minimumArea" type="range" min="0" max="100" value="12">
+              </label>
+              <label>Hole Filling <output id="holeFillingValue">1</output>
+                <input id="holeFilling" type="range" min="0" max="3" value="1">
+              </label>
+              <label>Shadow Correction <output id="shadowCorrectionValue">55%</output>
+                <input id="shadowCorrection" type="range" min="0" max="100" value="55">
+              </label>
+              <label class="toggle"><input id="preserveDots" type="checkbox" checked><span>Preserve Decorative Dots</span></label>
+            </div>
+          </fieldset>
+
           <p class="status" id="statusMessage" role="status" aria-live="polite">Choose an image to get started.</p>
 
           <div class="actions">
@@ -63,7 +120,15 @@
           </div>
         </div>
 
-        <div class="comparison" id="comparison">
+        <div class="preview-tools" aria-label="Preview controls">
+          <strong>Preview zoom</strong>
+          <button id="zoomOut" type="button" aria-label="Zoom out">−</button>
+          <input id="zoomRange" type="range" min="50" max="200" step="10" value="100" aria-label="Synchronized preview zoom">
+          <output id="zoomValue">100%</output>
+          <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
+        </div>
+
+        <div class="comparison three-stage" id="comparison">
           <article class="preview-card">
             <header><h2>Original photo</h2><span class="badge">Raster</span></header>
             <div class="preview-area" id="originalPreview">
@@ -75,10 +140,20 @@
             </div>
           </article>
 
-          <div class="arrow" aria-hidden="true">→</div>
+          <div class="arrow first-arrow" aria-hidden="true">→</div>
+
+          <article class="preview-card production-stage" id="cleanedCard">
+            <header><h2>Cleaned Color Preview</h2><span class="badge badge-clean">Clean</span></header>
+            <div class="preview-area" id="cleanedPreview">
+              <div class="empty-state" id="cleanedEmpty"><span>Cleaned colors will appear here</span></div>
+              <canvas id="cleanedCanvas" hidden></canvas>
+            </div>
+          </article>
+
+          <div class="arrow second-arrow" aria-hidden="true">→</div>
 
           <article class="preview-card">
-            <header><h2>Vector result</h2><span class="badge badge-vector">SVG</span></header>
+            <header><h2>Final Layered SVG</h2><span class="badge badge-vector">SVG</span></header>
             <div class="preview-area checkerboard" id="vectorPreview">
               <div class="empty-state" id="vectorEmpty">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 0v9m8-4.5-8 4.5m-8-4.5 8 4.5"/></svg>
@@ -87,6 +162,21 @@
             </div>
           </article>
         </div>
+
+        <section class="palette-panel" id="palettePanel" hidden aria-labelledby="paletteTitle">
+          <div><h2 id="paletteTitle">Extracted palette</h2><p>Select a swatch to change that vector layer before download.</p></div>
+          <div class="palette-swatches" id="paletteSwatches"></div>
+        </section>
+
+        <section class="compare-card" id="compareCard" hidden aria-labelledby="compareTitle">
+          <header><div><h2 id="compareTitle">Before &amp; after</h2><p>Drag the handle to compare every detail.</p></div><output id="compareValue">50% vector</output></header>
+          <div class="compare-stage" id="compareStage">
+            <img id="compareOriginal" alt="Original image for comparison">
+            <div class="compare-after" id="compareAfter"></div>
+            <span class="compare-line" id="compareLine" aria-hidden="true"><i>↔</i></span>
+            <input id="compareRange" type="range" min="0" max="100" value="50" aria-label="Before and after comparison position">
+          </div>
+        </section>
       </section>
 
       <section class="how-it-works" aria-labelledby="steps-title">
@@ -103,6 +193,7 @@
     <footer><span>Vectorly</span><p>Your images never leave your browser.</p></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js"></script>
+    <script src="batik-engine.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
