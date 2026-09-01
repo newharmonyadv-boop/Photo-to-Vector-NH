@@ -3,7 +3,7 @@
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const VALID_TYPES = new Set(["image/jpeg", "image/png"]);
 
-const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty", "settings", "batikPreset", "colorCount", "detailLevel", "smoothing", "smoothingValue", "noiseRemoval", "noiseValue", "outlineThickness", "outlineValue", "removeBackground", "zoomOut", "zoomRange", "zoomValue", "zoomIn", "compareCard", "compareOriginal", "compareAfter", "compareLine", "compareRange", "compareValue"];
+const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty", "settings", "traceEngine", "engineHelp", "batikPreset", "colorCount", "detailLevel", "smoothing", "smoothingValue", "noiseRemoval", "noiseValue", "outlineThickness", "outlineValue", "removeBackground", "zoomOut", "zoomRange", "zoomValue", "zoomIn", "compareCard", "compareOriginal", "compareAfter", "compareLine", "compareRange", "compareValue"];
 const elements = Object.fromEntries(ids.map((id) => [id, document.querySelector(`#${id}`)]));
 
 let selectedFile = null;
@@ -83,23 +83,30 @@ function loadFile(file) {
 
 function tracingOptions() {
   const detail = elements.detailLevel.value;
+  const isBatik = elements.traceEngine.value === "batik";
   const thresholds = { Low: [3, 3], Medium: [1, 1], High: [0.35, 0.35] };
-  const [ltres, qtres] = thresholds[detail];
+  let [ltres, qtres] = thresholds[detail];
+  if (isBatik) {
+    // The production profile follows curves more closely and spends additional
+    // quantization passes stabilizing the palette used by layered batik art.
+    ltres *= 0.72;
+    qtres *= 0.72;
+  }
   return {
     ltres,
     qtres,
     pathomit: Number(elements.noiseRemoval.value),
     numberofcolors: Number(elements.colorCount.value),
-    colorsampling: 2,
-    colorquantcycles: detail === "High" ? 5 : 3,
+    colorsampling: isBatik ? 1 : 2,
+    colorquantcycles: isBatik ? (detail === "High" ? 8 : 5) : (detail === "High" ? 5 : 3),
     mincolorratio: 0,
     blurradius: Number(elements.smoothing.value),
     blurdelta: 20,
     scale: 1,
     strokewidth: Number(elements.outlineThickness.value),
-    linefilter: detail !== "High",
-    rightangleenhance: detail === "Low",
-    roundcoords: 2,
+    linefilter: isBatik ? false : detail !== "High",
+    rightangleenhance: isBatik ? false : detail === "Low",
+    roundcoords: isBatik ? 3 : 2,
   };
 }
 
@@ -111,6 +118,7 @@ function prepareSvg(svg) {
 
   svgElement.setAttribute("role", "img");
   svgElement.setAttribute("aria-label", `Vector version of ${selectedFile.name}`);
+  svgElement.setAttribute("data-vectorly-engine", elements.traceEngine.value);
   const outline = Number(elements.outlineThickness.value);
   const paths = typeof svgElement.querySelectorAll === "function" ? [...svgElement.querySelectorAll("path")] : [];
   paths.forEach((path) => {
@@ -175,6 +183,13 @@ function updateSettingOutputs() {
   elements.outlineValue.textContent = `${elements.outlineThickness.value} px`;
 }
 
+function updateEngineHelp() {
+  const batik = elements.traceEngine.value === "batik";
+  elements.engineHelp.textContent = batik
+    ? "Optimized for layered color, smooth curves, and intricate textile artwork."
+    : "The original ImageTracer profile is retained for familiar, faster conversions.";
+}
+
 function updateZoom() {
   const zoom = Number(elements.zoomRange.value);
   elements.zoomValue.textContent = `${zoom}%`;
@@ -201,7 +216,10 @@ elements.convertBtn.addEventListener("click", convertImage);
 
 elements.settings.addEventListener("input", scheduleReconvert);
 elements.settings.addEventListener("change", scheduleReconvert);
+elements.traceEngine.addEventListener("change", updateEngineHelp);
 elements.batikPreset.addEventListener("click", () => {
+  elements.traceEngine.value = "batik";
+  updateEngineHelp();
   elements.colorCount.value = "32";
   elements.detailLevel.value = "High";
   elements.smoothing.value = "1";
@@ -233,5 +251,6 @@ elements.downloadBtn.addEventListener("click", () => {
 });
 
 updateSettingOutputs();
+updateEngineHelp();
 updateZoom();
 updateComparison();

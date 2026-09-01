@@ -8,6 +8,8 @@ Vectorly 2 is a beginner-friendly, browser-based photo vectorizer. Upload a JPG 
 - Responsive, side-by-side original and SVG previews
 - Color count, detail, smoothing, noise removal, outline, and background controls
 - **Batik High Detail** preset for curved ornaments, fine decoration, and distinct colors
+- Experimental **Batik Production** tracing engine with closer curve fitting and palette stabilization
+- Legacy ImageTracer tracing profile remains available as an alternative
 - Automatic reconversion whenever settings change after the first trace
 - Synchronized 50–200% preview zoom
 - Interactive before-and-after comparison slider
@@ -40,7 +42,7 @@ Then visit [http://localhost:8000](http://localhost:8000) in your browser.
 1. Drag a photo onto the upload area, or select **browse your files**.
 2. Choose a JPG or PNG file no larger than 10 MB.
 3. Confirm that the original photo appears in the preview.
-4. Pick a color count and detail level, or use **Batik High Detail** for intricate artwork.
+4. Choose the experimental **Batik Production** engine (the default) or **Legacy ImageTracer**, then pick a color count and detail level. Use **Batik High Detail** for intricate artwork.
 5. Select **Convert to vector** and wait for the SVG preview. Later setting changes reconvert automatically.
 6. Zoom both previews together or drag the before-and-after handle to inspect the result.
 7. Select **Download SVG**. The result is saved as `<original-name>.svg`.
@@ -49,7 +51,7 @@ To start over, remove the selected file with the × button and choose another im
 
 ## How conversion works
 
-The browser reads the selected image as a data URL. ImageTracerJS quantizes its colors and traces those areas into SVG paths using options assembled from the controls. Detail adjusts curve tracing, smoothing reduces abrupt pixel transitions, noise removal omits tiny paths, and outline thickness adds a matching edge. Background removal discards the trace's background color layer. The generated SVG is previewed in the page and packaged as an SVG file only when you download it.
+The browser reads the selected image as a data URL. Both engines run locally through ImageTracerJS. Batik Production uses closer curve tolerances, additional color-quantization passes, and disables line filtering and right-angle enhancement to retain ornamental detail; Legacy ImageTracer retains the established Vectorly 2 profile. Detail adjusts curve tracing, smoothing reduces abrupt pixel transitions, noise removal omits tiny paths, and outline thickness adds a matching edge. Background removal discards the trace's background color layer. The generated SVG is previewed in the page and packaged as an SVG file only when you download it.
 
 All conversion happens locally in the browser. The application has no upload server and does not store your image.
 
