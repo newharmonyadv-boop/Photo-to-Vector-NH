@@ -51,13 +51,21 @@
 
           <fieldset class="settings" id="settings">
             <legend>Fine-tune your vector</legend>
+            <div class="engine-row">
+              <label for="traceEngine">Tracing engine</label>
+              <select id="traceEngine">
+                <option value="batik" selected>Batik Production (experimental)</option>
+                <option value="legacy">Legacy ImageTracer</option>
+              </select>
+              <p id="engineHelp">Optimized for layered color, smooth curves, and intricate textile artwork.</p>
+            </div>
             <div class="preset-row">
               <button class="preset-button" id="batikPreset" type="button">✦ Batik High Detail</button>
               <span>Best for curved ornaments and intricate colorwork</span>
             </div>
             <div class="settings-grid">
               <label>Color count
-                <select id="colorCount"><option>4</option><option selected>8</option><option>16</option><option>24</option><option>32</option></select>
+                <select id="colorCount"><option>4</option><option selected>8</option><option>16</option><option>24</option><option>32</option><option>48</option><option>64</option></select>
               </label>
               <label>Detail level
                 <select id="detailLevel"><option>Low</option><option selected>Medium</option><option>High</option></select>

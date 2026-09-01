@@ -37,13 +37,14 @@ class Element {
 }
 
 function createApp() {
-  const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty", "settings", "batikPreset", "colorCount", "detailLevel", "smoothing", "smoothingValue", "noiseRemoval", "noiseValue", "outlineThickness", "outlineValue", "removeBackground", "zoomOut", "zoomRange", "zoomValue", "zoomIn", "compareCard", "compareOriginal", "compareAfter", "compareLine", "compareRange", "compareValue"];
+  const ids = ["fileInput", "dropZone", "selectedFile", "fileThumbnail", "fileName", "fileSize", "removeFileBtn", "convertBtn", "downloadBtn", "statusMessage", "originalImage", "originalEmpty", "vectorPreview", "vectorEmpty", "settings", "traceEngine", "engineHelp", "batikPreset", "colorCount", "detailLevel", "smoothing", "smoothingValue", "noiseRemoval", "noiseValue", "outlineThickness", "outlineValue", "removeBackground", "zoomOut", "zoomRange", "zoomValue", "zoomIn", "compareCard", "compareOriginal", "compareAfter", "compareLine", "compareRange", "compareValue"];
   const elements = Object.fromEntries(ids.map((id) => [id, new Element(id)]));
   elements.selectedFile.hidden = true;
   elements.originalImage.hidden = true;
   elements.convertBtn.disabled = true;
   elements.downloadBtn.disabled = true;
   elements.colorCount.value = "8";
+  elements.traceEngine.value = "batik";
   elements.detailLevel.value = "Medium";
   elements.smoothing.value = "2";
   elements.noiseRemoval.value = "4";
@@ -144,6 +145,7 @@ test("applies Batik High Detail settings and auto-reconverts", () => {
   app.elements.batikPreset.click();
 
   assert.equal(app.elements.colorCount.value, "32");
+  assert.equal(app.elements.traceEngine.value, "batik");
   assert.equal(app.elements.detailLevel.value, "High");
   assert.equal(app.elements.smoothing.value, "1");
   assert.equal(app.elements.noiseRemoval.value, "1");
@@ -161,4 +163,13 @@ test("keeps zoom and before-after controls synchronized", () => {
   app.elements.compareRange.dispatch("input");
   assert.equal(app.elements.compareAfter.style.clipPath, "inset(0 30% 0 0)");
   assert.equal(app.elements.compareLine.style.left, "70%");
+});
+
+test("offers Batik Production and preserves the legacy engine", () => {
+  const app = createApp();
+  assert.match(app.elements.engineHelp.textContent, /layered color/);
+
+  app.elements.traceEngine.value = "legacy";
+  app.elements.traceEngine.dispatch("change");
+  assert.match(app.elements.engineHelp.textContent, /original ImageTracer profile/);
 });
