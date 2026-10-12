@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fit-curve": "^0.2.0",
+    "imagetracerjs": "^1.2.6"
+  }
+}

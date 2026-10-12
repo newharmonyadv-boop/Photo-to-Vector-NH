@@ -1,0 +1,62 @@
+[
+  {
+    "fixture": "clean",
+    "engine": "imagetracer-batik",
+    "foreground_iou": 0.9745185680270688,
+    "rgb_mae": 10.63837890625,
+    "bytes": 21942,
+    "color_groups": 0,
+    "cubic_commands": 0,
+    "circle_arc_commands": 0
+  },
+  {
+    "fixture": "clean",
+    "engine": "imagetracer-fixed-palette",
+    "foreground_iou": 0.9689330066038128,
+    "rgb_mae": 1.4308626302083334,
+    "bytes": 14936,
+    "color_groups": 0,
+    "cubic_commands": 0,
+    "circle_arc_commands": 0
+  },
+  {
+    "fixture": "clean",
+    "engine": "hybrid",
+    "foreground_iou": 0.9855722445525703,
+    "rgb_mae": 0.5696842447916667,
+    "bytes": 13644,
+    "color_groups": 4,
+    "cubic_commands": 255,
+    "circle_arc_commands": 10
+  },
+  {
+    "fixture": "noisy",
+    "engine": "imagetracer-batik",
+    "foreground_iou": 0.9715951686797167,
+    "rgb_mae": 12.852815755208333,
+    "bytes": 505922,
+    "color_groups": 0,
+    "cubic_commands": 0,
+    "circle_arc_commands": 0
+  },
+  {
+    "fixture": "noisy",
+    "engine": "imagetracer-fixed-palette",
+    "foreground_iou": 0.9678463261834627,
+    "rgb_mae": 4.646888020833333,
+    "bytes": 15064,
+    "color_groups": 0,
+    "cubic_commands": 0,
+    "circle_arc_commands": 0
+  },
+  {
+    "fixture": "noisy",
+    "engine": "hybrid",
+    "foreground_iou": 0.9855722445525703,
+    "rgb_mae": 0.5696842447916667,
+    "bytes": 13644,
+    "color_groups": 4,
+    "cubic_commands": 255,
+    "circle_arc_commands": 10
+  }
+]
